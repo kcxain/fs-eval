@@ -1,20 +1,24 @@
-system_prompt = """You are a Hardware Engineer."""
+# system_prompt = """You are a Hardware Engineer."""
+system_prompt = """You are a helpful assistant. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>. \u00a0Now the user asks you to write verilog code. After thinking, when you finally reach a conclusion, enclose the final verilog code in ```verilog ``` within <answer> </answer> tags. i.e., <answer> ```verilog\n module top_module(in, out, ...) ... ``` </answer>.\n"""
 
-user_prompt = """You need to write the corresponding Verilog code based on the given problem, and your output should only include the corresponding Verilog code enclosed in ```verilog ```. Note that:
-- Think carefully before providing your final answer.
-- Make sure to use the precise module signature in your response if it's provided in the query.
+user_prompt = (
+    "{question}\nThe module head of the code should be:\n```verilog\n{module_head}\n```"
+)
 
-Now you are given the below instruction:
+# user_prompt = """You need to write the corresponding Verilog code based on the given problem, and your output should only include the corresponding Verilog code enclosed in ```verilog ```. Note that:
+# - Think carefully before providing your final answer.
+# - Make sure to use the precise module signature in your response if it's provided in the query.
 
-{question}
-The module head of the code should be:
-```verilog
-{module_head}
-```
+# Now you are given the below instruction:
 
-Please respond with thinking process and your final answer.
-"""
+# {question}
+# The module head of the code should be:
+# ```verilog
+# {module_head}
+# ```
 
+# Please respond with thinking process and your final answer.
+# """
 
 user_prompt_oneshot = """You need to write the corresponding Verilog code based on the given problem, and your output should only include the corresponding Verilog code enclosed in ```verilog ```. Note that:
 - Think carefully before providing your final answer.

@@ -1,17 +1,25 @@
-system_prompt = """You are a Software Engineer."""
+# system_prompt = """You are a Software Engineer."""
+system_prompt = """You are a helpful assistant. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>. \u00a0Now the user asks you to write python code. After thinking, when you finally reach a conclusion, enclose the final python code in ```python ``` within <answer> </answer> tags. i.e., <answer> ```python\n ... ``` </answer>.\n"""
 
-user_prompt = """You need to write the corresponding Python code based on the given problem, and your answer should include the corresponding Python code enclosed in ```python ```. Note that:
-- Think carefully before providing your final answer.
-- Make sure to use the precise function signature in your answer if it's provided in the query.
 
-Now you are given the below instruction:
-{problem}
-The function signature is:
+user_prompt = """Read the following function signature and docstring, and fully implement the function described.
 ```python
 {function_signature}
 ```
-Please respond with thinking process and your final answer.
 """
+
+# user_prompt = """You need to write the corresponding Python code based on the given problem, and your answer should include the corresponding Python code enclosed in ```python ```. Note that:
+# - Think carefully before providing your final answer.
+# - Make sure to use the precise function signature in your answer if it's provided in the query.
+
+# Now you are given the below instruction:
+# {problem}
+# The function signature is:
+# ```python
+# {function_signature}
+# ```
+# Please respond with thinking process and your final answer.
+# """
 
 user_prompt_oneshot = """You need to write the corresponding Python code based on the given problem, and your answer should include the corresponding Python code enclosed in ```python ```. Note that:
 - Think carefully before providing your final answer.

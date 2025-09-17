@@ -1,4 +1,4 @@
-system_prompt = "You are an expert in PyTorch and CUDA programming."
+system_prompt = "You are a helpful assistant. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>. \u00a0Now the user asks you to write CUDA extention for a PyTorch module. After thinking, when you finally reach a conclusion, enclose the final PyTorch code in ```python ``` within <answer> </answer> tags. i.e., <answer> ```python\n ... ``` </answer>.\n"
 
 
 user_prompt = r'''You will be given a python code snippet which declares a PyTorch model along with its init and forward inputs. The model is an instance of class `Model`. It will be created with arguments from `get_init_inputs()`. Then its `forward` function will be called with data from `get_inputs()`. Your task is to write a custom CUDA extension to accelerate the model `forward` function. Note that:
@@ -50,7 +50,6 @@ You should respond with:
 [Your thinking process]
 </think>
 Then the final answer:
-
 ```python
 import torch
 import torch.nn as nn
@@ -463,11 +462,10 @@ class ModelNew(nn.Module):
 ===== Example 3 End =====
 
 Now you are given the below PyTorch model:
+
 ```python
 __PYTORCH_MODULE__
 ```
-
-Please respond with thinking process and your final answer.
 '''
 
 if __name__ == "__main__":

@@ -180,13 +180,9 @@ if __name__ == "__main__":
                 "--data_path is provided, please only specify one dataset"
             )
             data_path = args.data_path
+            data = read_data(data_path)
         else:
-            assert dataset in dataset_input_map, (
-                f"dataset {dataset} not supported, please provide --data_path"
-            )
-            assert args.prompt_type == "direct" or args.prompt_type is not None
-            data_path = dataset_input_map[dataset]
-        data = read_data(data_path)
+            data = None
         sampler.evaluate_model(
             data=data,
             sample_n=args.sample_n,
