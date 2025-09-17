@@ -1,0 +1,2 @@
+[console_scripts]
+human_eval = human_eval.evaluate_functional_correctness:main

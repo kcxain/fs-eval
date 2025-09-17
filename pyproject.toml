@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fs-eval"
+version = "0.1.0"
+description = "Evaluate Full-stack Code Generation"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "datasets>=4.0.0",
+    "loguru>=0.7.3",
+    "torch==2.6.0",
+    "vllm>=0.8.5.post1",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["fs_eval*"]
+
+[tool.uv.sources]
+compute-eval = { path = "fs_eval/testbench/compute-eval", editable = true }
+kernelbench-eval = { path = "fs_eval/testbench/kernelbench-eval", editable = true }
+verilog-eval = { path = "fs_eval/testbench/VerilogEval_v1.0.0", editable = true }
+human-eval = { path = "fs_eval/testbench/human-eval", editable = true }
+leetcodedataset = { path = "fs_eval/testbench/LeetCodeDataset", editable = true }

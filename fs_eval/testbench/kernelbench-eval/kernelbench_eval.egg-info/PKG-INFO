@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: kernelbench_eval
+Version: 1.0
+Author: Changxin Ke
+Requires-Dist: tqdm
+Requires-Dist: fire
+Requires-Dist: numpy
+Dynamic: author
+Dynamic: requires-dist

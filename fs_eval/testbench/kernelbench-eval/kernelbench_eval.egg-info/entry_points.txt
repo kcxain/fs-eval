@@ -1,0 +1,2 @@
+[console_scripts]
+kernelbench = kernelbench_eval.evaluate_functional_correctness:main
