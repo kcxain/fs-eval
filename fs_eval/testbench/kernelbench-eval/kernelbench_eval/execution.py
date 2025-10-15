@@ -22,6 +22,7 @@ import subprocess
 from loguru import logger
 from unittest.mock import patch
 from kernelbench_eval.reward.refine import Refine, EvalContent
+
 # Get the directory where this script is located
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -309,20 +310,45 @@ def compute_score(
             eval_msg=eval_content,
         )
 
-def compute_score_remote(problem: Dict, completion: str, timeout: float):
+
+# def compute_score_remote(problem: Dict, completion: str, timeout: float):
+#     solution_str = completion
+#     ground_truth = problem["ground_truth"]["pytorch_module"]
+#     extra_info = problem["extra_info"]
+#     res = compute_score(solution_str, ground_truth, extra_info)
+#     if res.passed:
+#         return "passed"
+#     else:
+#         if not res.formated:
+#             return "not formatted"
+#         elif not res.compiled:
+#             return f"compile error: {res.compile_msg}"
+#         else:
+#             return f"test error: {res.eval_msg.error_msg}"
+import requests
+
+gpu_ip = "10.200.198.14"
+
+
+def compute_score_remote(problem: Dict, completion: str):
     solution_str = completion
     ground_truth = problem["ground_truth"]["pytorch_module"]
     extra_info = problem["extra_info"]
-    res = compute_score(solution_str, ground_truth, extra_info)
-    if res.passed:
+    # curl -X POST http://10.200.198.14:8000/compute_score   -F "code=123"   -F "timeout_sec=60"   -F "nvcc_flags=-O2 -arch=sm_80"
+    response = requests.post(
+        url=f"http://{gpu_ip}:8000/compute_score",
+        data={
+            "cuda_code": solution_str,
+            "torch_code": ground_truth,
+        },
+    )
+    response.raise_for_status()
+    res_json = response.json()
+    print(res_json)
+    if res_json["passed"]:
         return "passed"
     else:
-        if not res.formated:
-            return "not formatted"
-        elif not res.compiled:
-            return f"compile error: {res.compile_msg}"
-        else:
-            return f"test error: {res.eval_msg.error_msg}"
+        return res_json["msg"]
 
 
 def check_correctness(
@@ -336,7 +362,7 @@ def check_correctness(
         the results later even if execution finishes asynchronously.
     """
 
-    result = compute_score_remote(problem, completion, timeout)
+    result = compute_score_remote(problem, completion)
 
     return dict(
         task_id=problem["task_id"],

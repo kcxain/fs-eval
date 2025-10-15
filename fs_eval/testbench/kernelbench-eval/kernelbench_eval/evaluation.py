@@ -6,10 +6,14 @@ import itertools
 import numpy as np
 import tqdm
 import ray
+import os
 
 from kernelbench_eval.data import HUMAN_EVAL, read_problems, stream_jsonl, write_jsonl
 from kernelbench_eval.execution import check_correctness
 from loguru import logger
+
+os.environ["NCCL_DEBUG"] = "WARN"
+os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 
 def estimate_pass_at_k(
@@ -131,7 +135,7 @@ def evaluate_functional_correctness_from_data(
     problem_data,
     k: List[int] = [1, 5, 10, 100],
     n_workers: int = 128,
-    timeout: float = 300,
+    timeout: float = 60,
 ):
     """
     Evaluates the functional correctness of generated samples, and writes
@@ -140,22 +144,22 @@ def evaluate_functional_correctness_from_data(
 
     problems = {p["task_id"]: p for p in problem_data}
 
-    if not ray.is_initialized():
-        # this is for local ray cluster
-        ray.init(
-            runtime_env={
-                "env_vars": {
-                    "TOKENIZERS_PARALLELISM": "true",
-                    "NCCL_DEBUG": "0",
-                    "BPEX_NO_WARN_ON_UNTUNED_CASE": "1",
-                    "CUDA_VISIBLE_DEVICES": "4,5,6,7",
-                }
-            },
-            num_cpus=128,
-            num_gpus=4,
-        )
-    cluster_resources = ray.cluster_resources()
-    available_resources = ray.available_resources()
+    # if not ray.is_initialized():
+    #     # this is for local ray cluster
+    #     ray.init(
+    #         runtime_env={
+    #             "env_vars": {
+    #                 "TOKENIZERS_PARALLELISM": "true",
+    #                 "NCCL_DEBUG": "0",
+    #                 "BPEX_NO_WARN_ON_UNTUNED_CASE": "1",
+    #                 "CUDA_VISIBLE_DEVICES": "4,5,6,7",
+    #             }
+    #         },
+    #         num_cpus=128,
+    #         num_gpus=4,
+    #     )
+    # cluster_resources = ray.cluster_resources()
+    # available_resources = ray.available_resources()
     # Check the generated samples against test suites.
     with ThreadPoolExecutor(max_workers=n_workers) as executor:
         futures = []

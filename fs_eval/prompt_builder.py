@@ -175,7 +175,7 @@ class KernelBenchPromptBuilder(BasePromptBuilder):
                 output = {
                     "task_id": level_id + "-" + str(problem_id),
                     "question": [
-                        {"role": "system", "content": system_prompt},
+                        # {"role": "system", "content": system_prompt},
                         {
                             "role": "user",
                             "content": user_prompt.replace(
