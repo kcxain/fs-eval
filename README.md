@@ -7,17 +7,17 @@ Eval full-stack code generation.
 
 ### Verilog
 
-- ✅ verilog_eval_v1-human
-- ✅ verilog_eval_v1-machine
+- [x] verilog_eval_v1-human
+- [x] verilog_eval_v1-machine
 - [ ] RTLLM
 
 ### Python
-- HumanEval
+- [x] HumanEval
 - [ ] MBPP
 
 ### Kernel
-- Kernelbench
-- Compute-Eval
+- [x] Kernelbench
+- [x] Compute-Eval
 
 
 ## How to use
