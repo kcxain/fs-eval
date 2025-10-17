@@ -2,6 +2,24 @@
 
 Eval full-stack code generation.
 
+
+## Supported Benchmarks
+
+### Verilog
+
+- ✅ verilog_eval_v1-human
+- ✅ verilog_eval_v1-machine
+- [ ] RTLLM
+
+### Python
+- HumanEval
+- [ ] MBPP
+
+### Kernel
+- Kernelbench
+- Compute-Eval
+
+
 ## How to use
 
 ```bash
