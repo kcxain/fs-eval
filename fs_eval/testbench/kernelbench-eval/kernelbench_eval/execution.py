@@ -325,15 +325,15 @@ def compute_score(
 #             return f"compile error: {res.compile_msg}"
 #         else:
 #             return f"test error: {res.eval_msg.error_msg}"
-import requests
-
-gpu_ip = "10.200.198.14"
 
 
 def compute_score_remote(problem: Dict, completion: str):
+    import requests
+
+    gpu_ip = os.environ.get("CUDA_SERVER_IP", "10.200.240.10")
+
     solution_str = completion
     ground_truth = problem["ground_truth"]["pytorch_module"]
-    extra_info = problem["extra_info"]
     # curl -X POST http://10.200.198.14:8000/compute_score   -F "code=123"   -F "timeout_sec=60"   -F "nvcc_flags=-O2 -arch=sm_80"
     response = requests.post(
         url=f"http://{gpu_ip}:8000/compute_score",

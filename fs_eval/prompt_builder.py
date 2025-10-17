@@ -4,6 +4,12 @@ from fs_eval.datasets_map import dataset_problem_map
 from fs_eval.utils.io import read_jsonl, write_jsonl
 from loguru import logger
 
+from jinja2 import Template
+
+from fs_eval.prompts.hardware.gpu_specs import GPU_SPEC_INFO
+from fs_eval.prompts.examples import softmax_example
+
+
 PROMPT_BUILDERS = {}
 
 
@@ -166,22 +172,59 @@ class KernelBenchPromptBuilder(BasePromptBuilder):
             case "direct":
                 return f"Write a CUDA kernel to perform the following task:\n{problem['description']}\n"
             case "cot":
-                from fs_eval.prompts.kernelbench import user_prompt, system_prompt
+                # from fs_eval.prompts.kernelbench import user_prompt, system_prompt
 
+                # pytorch_module = problem["ground_truth"]["pytorch_module"]
+                # level_id = str(problem["level"])
+                # op_name = problem["extra_info"]["op_name"]
+                # problem_id = problem["extra_info"]["problem_id"]
+                # output = {
+                #     "task_id": level_id + "-" + str(problem_id),
+                #     "question": [
+                #         # {"role": "system", "content": system_prompt},
+                #         {
+                #             "role": "user",
+                #             "content": user_prompt.replace(
+                #                 "__PYTORCH_MODULE__", pytorch_module.strip()
+                #             ),
+                #         },
+                #     ],
+                #     "data_source": f"{dataset_id}/level_{level_id}",
+                #     "ability": "code",
+                #     "answer": "",
+                #     "raw_problem": pytorch_module,
+                #     "level": level_id,
+                #     "type": "",
+                #     "ground_truth": {
+                #         "pytorch_module": pytorch_module,
+                #     },
+                #     "style": "cuda-sandbox-v2",
+                #     "extra_info": {"op_name": op_name, "problem_id": problem_id},
+                # }
+                # return output
+                with open(
+                    "fs-eval/fs_eval/prompts/kernelbench.jinja", "r", encoding="utf-8"
+                ) as f:
+                    tmpl = Template(f.read())
                 pytorch_module = problem["ground_truth"]["pytorch_module"]
                 level_id = str(problem["level"])
                 op_name = problem["extra_info"]["op_name"]
                 problem_id = problem["extra_info"]["problem_id"]
+                prompt = tmpl.render(
+                    GPU_name="A100-80GB",
+                    GPU_list=GPU_SPEC_INFO,
+                    examples=softmax_example,
+                    py_code=pytorch_module,
+                    GPU_info_format="bullets",
+                )
                 output = {
                     "task_id": level_id + "-" + str(problem_id),
                     "question": [
-                        # {"role": "system", "content": system_prompt},
                         {
-                            "role": "user",
-                            "content": user_prompt.replace(
-                                "__PYTORCH_MODULE__", pytorch_module.strip()
-                            ),
+                            "role": "system",
+                            "content": "You are Qwen, created by Alibaba Cloud. You are a helpful assistant.",
                         },
+                        {"role": "user", "content": prompt},
                     ],
                     "data_source": f"{dataset_id}/level_{level_id}",
                     "ability": "code",
@@ -218,10 +261,10 @@ def build_prompt(dataset_name, prompt_type="direct"):
                 "question": prompt,
                 "data_source": dataset_name,
             })
-    write_jsonl(prompts, f"fs_eval/data/{prompt_type}/{dataset_name}.jsonl")
+    write_jsonl(prompts, f"fs-eval/data/{prompt_type}/{dataset_name}.jsonl")
     logger.info(
         f"Built {len(prompts)} prompts for dataset {dataset_name} with prompt type {prompt_type}"
     )
-    logger.info(f"Saved prompts to fs_eval/data/{prompt_type}/{dataset_name}.jsonl")
+    logger.info(f"Saved prompts to fs-eval/data/{prompt_type}/{dataset_name}.jsonl")
     logger.info(f"Example prompt: {prompts[0]}")
     return prompts
