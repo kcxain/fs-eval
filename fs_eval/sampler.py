@@ -8,7 +8,7 @@ from loguru import logger
 from pathlib import Path
 import os
 
-gpu_groups = [[0, 1], [2, 3]]
+gpu_groups = [[0, 1], [2, 3], [4, 5], [6, 7]]
 
 OUTPUTS = Path("./outputs/eval/")
 

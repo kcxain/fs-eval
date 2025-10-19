@@ -341,6 +341,7 @@ def compute_score_remote(problem: Dict, completion: str):
             "cuda_code": solution_str,
             "torch_code": ground_truth,
         },
+        proxies={"http": None, "https": None},
     )
     response.raise_for_status()
     res_json = response.json()
