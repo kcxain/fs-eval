@@ -34,6 +34,17 @@ class BasePromptBuilder:
     def build_prompt(self, dataset_name, problem):
         raise NotImplementedError
 
+@register_prompt_builder("aime25")
+class AIME25PromptBuilder(BasePromptBuilder):
+    def build_prompt(self, dataset_name, problem):
+        match self.prompt_type:
+            case "direct":
+                return f"Solve the following math problem:\n{problem['problem']}\n"
+            case "cot":
+                raise NotImplementedError("CoT prompt not implemented for AIME25")
+            case "coe":
+                
+
 
 @register_prompt_builder("compute-eval")
 class ComputeEvalPromptBuilder(BasePromptBuilder):

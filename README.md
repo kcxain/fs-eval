@@ -2,7 +2,6 @@
 
 Eval full-stack code generation.
 
-
 ## Supported Benchmarks
 
 ### Verilog
@@ -18,6 +17,19 @@ Eval full-stack code generation.
 ### Kernel
 - [x] Kernelbench
 - [x] Compute-Eval
+
+### Math
+- [x] AIME
+
+## How to install
+
+```bash
+uv add "fs_eval/testbench/compute-eval" --editable
+uv add "fs_eval/testbench/kernelbench-eval" --editable
+uv add "fs_eval/testbench/VerilogEval_v1.0.0" --editable
+uv add "fs_eval/testbench/human-eval" --editable
+uv add "fs_eval/testbench/LeetCodeDataset" --editable
+```
 
 
 ## How to use
